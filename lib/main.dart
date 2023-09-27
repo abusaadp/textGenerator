@@ -91,7 +91,7 @@ generate(text, Interpreter data) {
 
     var maxLogitValue = max(filteredLogits);
 
-    List logitsExp = filteredLogits.map((e) => (e - maxLogitValue)).toList();
+    List logitsExp = filteredLogits.map((e) => exp(e - maxLogitValue)).toList();
 
     var sumExp = sumBy(logitsExp);
 
@@ -121,15 +121,15 @@ int randomIndex(List<dynamic> probs) {
   var rnd = sumBy(probs) * Xrandom().nextFloat();
   var acc = 0.0;
   var i = 0;
-  
 
-  probs.forEachIndexed((index, element) {
-    acc += element;
-    if (rnd < acc) {
-      i = index;
-      return;
+
+  for(int j= 0 ; j < probs.length; j++) {
+    i = j;
+    acc += probs[j];
+    if(rnd < acc) {
+      break;
     }
-  });
+  }
 
   return i ;
 }
